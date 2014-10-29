@@ -3,26 +3,36 @@
 //%i converts the argument to a integer value
 //%f converts the argument to a floating point number
 //%o converts the argument to an Object
-var specialConsole = (function(){
+var specialConsole = (function () {
+    function writeLine(message) {
+        console.log(getMessage.apply(this, arguments));
+    }
 
-    function writeLine(message, values){
-        // TODO: print on the console and return the result as string
-        if(arguments.length > 1){
-            var pattern = /{\d*}/g;
-            message = message.replace(pattern, "%s");
+    function writeError(message) {
+        var msg = getMessage.apply(this, arguments);
+        console.log("%c" + msg, "color:red;font-weight:bold;");
+    }
 
-            console.log.apply(this, [message, values, values, values]);
-        } else{
-            console.log(message);
+    function writeWarning(message) {
+        var msg = getMessage.apply(this, arguments);
+        console.log("%c" + msg, "color:orange;font-weight:bold;");
+    }
+
+    function getMessage(message) {
+        if (arguments.length > 1) {
+            var pattern = /{\d*}/;
+            var continuousPattern = /{\d*}/g;
+
+            if (message.match(continuousPattern).length != arguments.length - 1) {
+                throw new Error("The number of the placeholders and the actual values should be the same!");
+            }
+
+            for (var i = 1; i < arguments.length; i++) {
+                message = message.replace(pattern, arguments[i]);
+            }
         }
-    }
 
-    function writeError(){
-        // TODO:
-    }
-
-    function writeWarning(){
-        // TODO:
+        return message;
     }
 
     var newConsole = {
@@ -35,6 +45,6 @@ var specialConsole = (function(){
 }());
 
 specialConsole.writeLine("Message: hello");
-specialConsole.writeLine("Message: {0} {1}", "mechka", "hello");
-//specialConsole.writeError("Error: {0}", "A fatal error has occurred.");
-//specialConsole.writeWarning("Warning: {0}", "You are not allowed to do that!");
+specialConsole.writeLine("Message: {0} {1}", "hello", "pich");
+specialConsole.writeError("Error: {0}", "A fatal error has occurred.");
+specialConsole.writeWarning("Warning: {0}", "You are not allowed to do that!");
