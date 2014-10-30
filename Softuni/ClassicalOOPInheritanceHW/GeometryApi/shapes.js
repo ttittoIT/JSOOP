@@ -1,23 +1,27 @@
 var Shapes = (function () {
     var Point = (function () {
-        var self = this;
-
-        function Point(x, y) {
-            self._x = x;
-            self._y = y;
+        function Point(x, y, z) {
+            this._x = x;
+            this._y = y;
+            this._z = z;
         }
 
         function getX() {
-            return self._x;
+            return this._x;
         }
 
         function getY() {
-            return self._y;
+            return this._y;
+        }
+
+        function getZ() {
+            return this._z;
         }
 
         Point.prototype = {
-            x: getX,
-            y: getY,
+            getX: getX,
+            getY: getY,
+            getZ: getZ,
             draw: function () {
                 // TODO: implement point drawing on a canvas
                 console.log("Point drawn.");
@@ -28,36 +32,34 @@ var Shapes = (function () {
     }());
 
     var Shape = (function () {
-        var self = this;
-
         function Shape(point, color) {
-            self._type = "Shape";
-            self._point = point;
-            self._color = color;
+            this._type = "Point";
+            this._point = point;
+            this._color = color;
         }
 
         function getShapeType() {
-            return this._type || self._type;
+            return this._type;
         }
 
         function getColor() {
-            return self._color;
+            return this._color;
         }
 
         function getPoint() {
-            return self._point;
+            return this._point;
         }
 
         Shape.prototype = {
-            A: getPoint,
-            color: getColor,
+            getPoint: getPoint,
+            getColor: getColor,
             draw: function () {
                 // TODO: Implement shape drawing on a canvas
                 console.log("Shape drawn");
             },
             getShapeType: getShapeType,
             toString: function () {
-                return getShapeType() + " - X: " + getPoint().x() + ", Y: " + getPoint().y() + ", Color: " + getColor().toHex();
+                return this._type + " - X: " + this._point.getX() + ", Y: " + this._point.getY() + ", Color: " + this._color.toHex();
             }
         };
 
@@ -65,8 +67,6 @@ var Shapes = (function () {
     }());
 
     var Circle = (function () {
-        var self = this;
-
         function validateRadius(radius) {
             if (radius <= 0) {
                 return false;
@@ -76,28 +76,28 @@ var Shapes = (function () {
 
         function Circle(point, radius, color) {
             Shape.call(this, point, color);
-            if (!validateRadius(self._radius)) {
+            if (!validateRadius(this._radius)) {
                 throw new Error("Circle radius should be positive number!");
             }
-            self._type = "Circle";
-            self._radius = radius;
+            this._type = "Circle";
+            this._radius = radius;
         }
 
         Circle.prototype = new Shape();
 
         function getRadius() {
-            return self._radius;
+            return this._radius;
         }
 
         Circle.prototype = {
-            radius: getRadius,
+            getRadius: getRadius,
             draw: function () {
                 // TODO: Implement circle drawing on a canvas
                 console.log("Circle drawn.");
             },
             toString: function () {
-                var circleStr = Shape.prototype.toString.call(self);
-                circleStr += ", Radius: " + getRadius();
+                var circleStr = Shape.prototype.toString.call(this);
+                circleStr += ", Radius: " + this._radius;
                 return circleStr;
             }
         };
@@ -106,35 +106,33 @@ var Shapes = (function () {
     }());
 
     var Rectangle = (function () {
-        var self = this;
-
         function Rectangle(point, color, width, height) {
             Shape.call(this, point, color);
-            self._type = "Rectangle";
-            self._width = width;
-            self._height = height;
+            this._type = "Rectangle";
+            this._width = width;
+            this._height = height;
         }
 
         Rectangle.prototype = new Shape();
 
         function getWidth() {
-            return self._width;
+            return this._width;
         }
 
         function getHeight() {
-            return self._height;
+            return this._height;
         }
 
         Rectangle.prototype = {
-            width: getWidth(),
-            height: getHeight(),
+            getWidth: getWidth(),
+            getHeight: getHeight(),
             draw: function draw() {
                 // TODO: Implement drawing rectangle on a canvas
                 console.log("Rectangle drawn.");
             },
             toString: function () {
-                var rectStr = Shape.prototype.toString.call(self);
-                rectStr += ", Width: " + getWidth() + ", Height: " + getHeight();
+                var rectStr = Shape.prototype.toString.call(this);
+                rectStr += ", Width: " + this._width + ", Height: " + this._height;
                 return rectStr;
             }
         }
@@ -143,18 +141,15 @@ var Shapes = (function () {
     }());
 
     var Triangle = (function () {
-        var self = this;
-
-        function Triangle(firstPoint, color, secondPoint, thirdPoint) {
-            Shape.call(self, firstPoint, color);
-            self._type = "Triangle";
-            self._secondPoint = secondPoint;
-            self._thirdPoint = thirdPoint;
+        function Triangle(firstPoint, secondPoint, thirdPoint, color) {
+            Shape.call(this, firstPoint, color);
+            this._type = "Triangle";
+            this._secondPoint = secondPoint;
+            this._thirdPoint = thirdPoint;
         }
 
         function getFirstPoint() {
-            console.log(Shape.prototype.A());
-            return Shape.prototype.A();
+            return Shape.prototype.getPoint();
         }
 
         function getSecondPoint() {
@@ -171,17 +166,17 @@ var Shapes = (function () {
 
         Triangle.prototype = new Shape();
         Triangle.prototype = {
-            A: getFirstPoint(),
-            B: getSecondPoint(),
-            C: getThirdPoint(),
+            getFirstPoint: getFirstPoint(),
+            getSecondPoint: getSecondPoint(),
+            getThirdPoint: getThirdPoint(),
             draw: function draw() {
                 // TODO: implement triangle drawing on a canvas
                 console.log("Triangle drawn.");
             },
             toString: function () {
-                var triangleStr = Shape.prototype.toString.call(self);
-                triangleStr += ", X2: " + getSecondPoint().x() + ", Y2: " + getSecondPoint().y()
-                    + ", X3: " + self._thirdPoint.x() + ", Y3: " + self._thirdPoint.y();
+                var triangleStr = Shape.prototype.toString.call(this);
+                triangleStr += ", X2: " + this._secondPoint.getX() + ", Y2: " + this._secondPoint.getY()
+                    + ", X3: " + this._thirdPoint.getX() + ", Y3: " + this._thirdPoint.getY();
                 return triangleStr;
             }
         }
@@ -190,25 +185,49 @@ var Shapes = (function () {
 
     }());
 
+    var Segment = (function () {
+        function Segment(firstPoint, secondPoint, color) {
+            Shape.call(this, firstPoint, color);
+            this._type = "Segment";
+            this._secondPoint = secondPoint;
+            this._color = color;
+        }
+
+        Segment.prototype = new Shape();
+        Segment.prototype = {
+            draw: function draw() {
+                // TODO: implement drawing segment on a canvas
+                console.log("Segment drawn.");
+            },
+            toString: function toString() {
+                var segmentStr = Shape.prototype.toString.call(this);
+                segmentStr += ", X2: " + this._secondPoint.getX() + ", Y2: " + this._secondPoint.getY();
+                return segmentStr;
+            }
+        }
+
+        return Segment;
+    }());
+
+
     // Module returned objects
     return{
         Point: Point,
         Shape: Shape,
         Circle: Circle,
         Rectangle: Rectangle,
-        Triangle: Triangle
+        Triangle: Triangle,
+        Segment: Segment
     }
 }());
 
 var Utils = (function () {
     var Color = (function () {
-        var self = this;
-
         function Color(r, g, b) {
             // TODO: Validate values of the color components (0 - 255)
-            self._r = r;
-            self._g = g;
-            self._b = b;
+            this._r = r;
+            this._g = g;
+            this._b = b;
         }
 
         function compToHex(c) {
@@ -217,7 +236,7 @@ var Utils = (function () {
         }
 
         function colorToHex() {
-            var colorStr = "#" + compToHex(self._r) + compToHex(self._g) + compToHex(self._b);
+            var colorStr = "#" + compToHex(this._r) + compToHex(this._g) + compToHex(this._b);
             return colorStr.toUpperCase();
         }
 
@@ -239,7 +258,6 @@ console.log(color.toHex());
 
 var point = new Shapes.Point(2, 3);
 point.draw();
-console.log(point.x());
 
 var shape = new Shapes.Shape(new Shapes.Point(2, 3), new Utils.Color(28, 24, 26));
 shape.draw();
@@ -249,16 +267,23 @@ var circle = new Shapes.Circle(new Shapes.Point(4, 5), 22, new Utils.Color(58, 5
 circle.draw();
 console.log(circle.toString());
 
-var rect = new Shapes.Rectangle(new Shapes.Point(6, 7), new Utils.Color(58, 54, 56), 220, 330);
+var rect = new Shapes.Rectangle(new Shapes.Point(6, 7), new Utils.Color(58, 124, 56), 220, 330);
 rect.draw();
 console.log(rect.toString());
 
 var triangle = new Shapes.Triangle(
     new Shapes.Point(6, 7),
-    new Utils.Color(58, 54, 56),
-    new Shapes.Point(9, 10),
-    new Shapes.Point(8, 15));
-
+    new Shapes.Point(9, 100),
+    new Shapes.Point(8, 15),
+    new Utils.Color(158, 54, 156));
 triangle.draw();
 console.log(triangle.toString());
+
+var segment = new Shapes.Segment(
+    new Shapes.Point(9, 10),
+    new Shapes.Point(8, 15),
+    new Utils.Color(58, 54, 56));
+segment.draw();
+console.log(segment.toString());
+
 
