@@ -51,13 +51,29 @@ var Shapes = (function () {
         }
 
         Shape.prototype = {
+            getShapeType: getShapeType,
             getPoint: getPoint,
             getColor: getColor,
+            getParametersControls: function () {
+                var controls = [];
+
+                var lblX1 = document.createElement("label");
+                lblX1.setAttribute("for", "x1");
+                lblX1.innerHTML = "X1";
+                controls.push(lblX1);
+
+                var inputX1 = document.createElement("input");
+                inputX1.setAttribute("type", "text");
+                inputX1.id = "x1";
+                controls.push(inputX1);
+
+                return controls;
+            },
             draw: function () {
                 // TODO: Implement shape drawing on a canvas
                 console.log("Shape drawn");
             },
-            getShapeType: getShapeType,
+
             toString: function () {
                 return this._type + " - X: " + this._point.getX() + ", Y: " + this._point.getY() + ", Color: " + this._color.toHex();
             }
@@ -91,6 +107,21 @@ var Shapes = (function () {
 
         Circle.prototype = {
             getRadius: getRadius,
+            getParametersControls: function () {
+                var controls = Shape.prototype.getParametersControls.call();
+
+                var lblRadius = document.createElement("label");
+                lblRadius.setAttribute("for", "radius");
+                lblRadius.innerHTML = "Radius";
+                controls.push(lblRadius);
+
+                var inputRadius = document.createElement("input");
+                inputRadius.setAttribute("type", "text");
+                inputRadius.id = "radius";
+                controls.push(inputRadius);
+
+                return controls;
+            },
             draw: function () {
                 // TODO: Implement circle drawing on a canvas
                 console.log("Circle drawn.");
@@ -126,6 +157,41 @@ var Shapes = (function () {
         Rectangle.prototype = {
             getWidth: getWidth(),
             getHeight: getHeight(),
+            getParametersControls: function () {
+                var controls = Shape.prototype.getParametersControls.call();
+
+                var lblX2 = document.createElement("label");
+                lblX2.setAttribute("for", "x2");
+                lblX2.innerHTML = "X2";
+                controls.push(lblX2);
+
+                var inputX2 = document.createElement("input");
+                inputX2.setAttribute("type", "text");
+                inputX2.id = "x2";
+                controls.push(inputX2);
+
+                var lblWidth = document.createElement("label");
+                lblWidth.setAttribute("for", "width");
+                lblWidth.innerHTML = "Width";
+                controls.push(lblWidth);
+
+                var inputWidth = document.createElement("input");
+                inputWidth.setAttribute("type", "text");
+                inputWidth.id = "width";
+                controls.push(inputWidth);
+
+                var lblHeight = document.createElement("label");
+                lblHeight.setAttribute("for", "height");
+                lblHeight.innerHTML = "Height";
+                controls.push(lblHeight);
+
+                var inputHeight = document.createElement("input");
+                inputHeight.setAttribute("type", "text");
+                inputHeight.id = "height";
+                controls.push(inputHeight);
+
+                return controls;
+            },
             draw: function draw() {
                 // TODO: Implement drawing rectangle on a canvas
                 console.log("Rectangle drawn.");
@@ -169,6 +235,31 @@ var Shapes = (function () {
             getFirstPoint: getFirstPoint(),
             getSecondPoint: getSecondPoint(),
             getThirdPoint: getThirdPoint(),
+            getParametersControls: function () {
+                var controls = Shape.prototype.getParametersControls.call();
+
+                var lblX2 = document.createElement("label");
+                lblX2.setAttribute("for", "x2");
+                lblX2.innerHTML = "X2";
+                controls.push(lblX2);
+
+                var inputX2 = document.createElement("input");
+                inputX2.setAttribute("type", "text");
+                inputX2.id = "x2";
+                controls.push(inputX2);
+
+                var lblX3 = document.createElement("label");
+                lblX3.setAttribute("for", "x3");
+                lblX3.innerHTML = "X3";
+                controls.push(lblX3);
+
+                var inputX3 = document.createElement("input");
+                inputX3.setAttribute("type", "text");
+                inputX3.id = "x3";
+                controls.push(inputX3);
+
+                return controls;
+            },
             draw: function draw() {
                 // TODO: implement triangle drawing on a canvas
                 console.log("Triangle drawn.");
@@ -195,6 +286,21 @@ var Shapes = (function () {
 
         Segment.prototype = new Shape();
         Segment.prototype = {
+            getParametersControls: function () {
+                var controls = Shape.prototype.getParametersControls.call();
+
+                var lblX2 = document.createElement("label");
+                lblX2.setAttribute("for", "x2");
+                lblX2.innerHTML = "X2";
+                controls.push(lblX2);
+
+                var inputX2 = document.createElement("input");
+                inputX2.setAttribute("type", "text");
+                inputX2.id = "x2";
+                controls.push(inputX2);
+
+                return controls;
+            },
             draw: function draw() {
                 // TODO: implement drawing segment on a canvas
                 console.log("Segment drawn.");
