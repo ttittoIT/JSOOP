@@ -3,7 +3,7 @@ var Shapes = (function () {
         function Point(x, y, z) {
             this._x = x;
             this._y = y;
-            this._z = z;
+            this._z = z || 0;
         }
 
         function getX() {
@@ -21,21 +21,20 @@ var Shapes = (function () {
         Point.prototype = {
             getX: getX,
             getY: getY,
-            getZ: getZ,
-            draw: function () {
-                // TODO: implement point drawing on a canvas
-                console.log("Point drawn.");
-            }
+            getZ: getZ
         }
 
         return Point;
     }());
 
     var Shape = (function () {
+        var self;
+
         function Shape(point, color) {
             this._type = "Point";
             this._point = point;
             this._color = color;
+            self = this;
         }
 
         function getShapeType() {
@@ -67,15 +66,28 @@ var Shapes = (function () {
                 inputX1.id = "x1";
                 controls.push(inputX1);
 
+                var lblY1 = document.createElement("label");
+                lblY1.setAttribute("for", "y1");
+                lblY1.innerHTML = "Y1";
+                controls.push(lblY1);
+
+                var inputY1 = document.createElement("input");
+                inputY1.setAttribute("type", "text");
+                inputY1.id = "y1";
+                controls.push(inputY1);
+
                 return controls;
             },
-            draw: function () {
-                // TODO: Implement shape drawing on a canvas
-                console.log("Shape drawn");
+            draw: function (drawingBoard) {
+                var ctx = drawingBoard.getContext("2d");
+                ctx.beginPath();
+                ctx.fillStyle = this._color;
+                ctx.fillRect(this._point.getX(), this._point.getY(), 2, 2);
+                ctx.closePath();
             },
 
             toString: function () {
-                return this._type + " - X: " + this._point.getX() + ", Y: " + this._point.getY() + ", Color: " + this._color.toHex();
+                return this._type + " - X1: " + this._point.getX() + ", Y1: " + this._point.getY() + ", Color: " + this._color;
             }
         };
 
@@ -83,6 +95,8 @@ var Shapes = (function () {
     }());
 
     var Circle = (function () {
+        var self;
+
         function validateRadius(radius) {
             if (radius <= 0) {
                 return false;
@@ -97,6 +111,7 @@ var Shapes = (function () {
             }
             this._type = "Circle";
             this._radius = radius;
+            self = this;
         }
 
         Circle.prototype = new Shape();
@@ -122,9 +137,19 @@ var Shapes = (function () {
 
                 return controls;
             },
-            draw: function () {
-                // TODO: Implement circle drawing on a canvas
-                console.log("Circle drawn.");
+            draw: function (drawingBoard) {
+                var ctx = drawingBoard.getContext("2d");
+                ctx.beginPath();
+                ctx.fillStyle = this._color;
+                ctx.arc(this._point.getX(),
+                    this._point.getY(),
+                    this.getRadius(),
+                    0,
+                    2 * Math.PI);
+
+                ctx.stroke();
+                ctx.closePath();
+                ctx.fill();
             },
             toString: function () {
                 var circleStr = Shape.prototype.toString.call(this);
@@ -160,16 +185,6 @@ var Shapes = (function () {
             getParametersControls: function () {
                 var controls = Shape.prototype.getParametersControls.call();
 
-                var lblX2 = document.createElement("label");
-                lblX2.setAttribute("for", "x2");
-                lblX2.innerHTML = "X2";
-                controls.push(lblX2);
-
-                var inputX2 = document.createElement("input");
-                inputX2.setAttribute("type", "text");
-                inputX2.id = "x2";
-                controls.push(inputX2);
-
                 var lblWidth = document.createElement("label");
                 lblWidth.setAttribute("for", "width");
                 lblWidth.innerHTML = "Width";
@@ -192,9 +207,16 @@ var Shapes = (function () {
 
                 return controls;
             },
-            draw: function draw() {
-                // TODO: Implement drawing rectangle on a canvas
-                console.log("Rectangle drawn.");
+            draw: function draw(drawingBoard) {
+                var ctx = drawingBoard.getContext("2d");
+                ctx.beginPath();
+                ctx.fillStyle = this._color;
+                ctx.fillRect(this._point.getX(),
+                    this._point.getY(),
+                    this._width,
+                    this._height);
+                ctx.closePath();
+                ctx.fill();
             },
             toString: function () {
                 var rectStr = Shape.prototype.toString.call(this);
@@ -248,6 +270,16 @@ var Shapes = (function () {
                 inputX2.id = "x2";
                 controls.push(inputX2);
 
+                var lblY2 = document.createElement("label");
+                lblY2.setAttribute("for", "y2");
+                lblY2.innerHTML = "Y2";
+                controls.push(lblY2);
+
+                var inputY2 = document.createElement("input");
+                inputY2.setAttribute("type", "text");
+                inputY2.id = "y2";
+                controls.push(inputY2);
+
                 var lblX3 = document.createElement("label");
                 lblX3.setAttribute("for", "x3");
                 lblX3.innerHTML = "X3";
@@ -258,11 +290,27 @@ var Shapes = (function () {
                 inputX3.id = "x3";
                 controls.push(inputX3);
 
+                var lblY3 = document.createElement("label");
+                lblY3.setAttribute("for", "y3");
+                lblY3.innerHTML = "Y3";
+                controls.push(lblY3);
+
+                var inputY3 = document.createElement("input");
+                inputY3.setAttribute("type", "text");
+                inputY3.id = "y3";
+                controls.push(inputY3);
+
                 return controls;
             },
-            draw: function draw() {
-                // TODO: implement triangle drawing on a canvas
-                console.log("Triangle drawn.");
+            draw: function draw(drawingBoard) {
+                var ctx = drawingBoard.getContext("2d");
+                ctx.fillStyle = this._color;
+                ctx.beginPath();
+                ctx.moveTo(this._point._x,this._point._y);
+                ctx.lineTo(this._secondPoint._x,this._secondPoint._y);
+                ctx.lineTo(this._thirdPoint._x,this._thirdPoint._y);
+                ctx.fill();
+                ctx.closePath();
             },
             toString: function () {
                 var triangleStr = Shape.prototype.toString.call(this);
@@ -299,11 +347,27 @@ var Shapes = (function () {
                 inputX2.id = "x2";
                 controls.push(inputX2);
 
+                var lblY2 = document.createElement("label");
+                lblY2.setAttribute("for", "y2");
+                lblY2.innerHTML = "Y2";
+                controls.push(lblY2);
+
+                var inputY2 = document.createElement("input");
+                inputY2.setAttribute("type", "text");
+                inputY2.id = "y2";
+                controls.push(inputY2);
+
                 return controls;
             },
-            draw: function draw() {
-                // TODO: implement drawing segment on a canvas
-                console.log("Segment drawn.");
+            draw: function draw(drawingBoard) {
+                var ctx = drawingBoard.getContext("2d");
+                ctx.strokeStyle = this._color;
+                ctx.beginPath();
+                ctx.moveTo(this._point._x,this._point._y);
+                ctx.lineTo(this._secondPoint._x,this._secondPoint._y);
+                ctx.stroke();
+                ctx.fill();
+                ctx.closePath();
             },
             toString: function toString() {
                 var segmentStr = Shape.prototype.toString.call(this);
@@ -314,7 +378,6 @@ var Shapes = (function () {
 
         return Segment;
     }());
-
 
     // Module returned objects
     return{
@@ -359,37 +422,37 @@ var Utils = (function () {
 }());
 
 // TESTS
-var color = new Utils.Color(54, 16, 28);
-console.log(color.toHex());
-
-var point = new Shapes.Point(2, 3);
-point.draw();
-
-var shape = new Shapes.Shape(new Shapes.Point(2, 3), new Utils.Color(28, 24, 26));
-shape.draw();
-console.log(shape.toString());
-
-var circle = new Shapes.Circle(new Shapes.Point(4, 5), 22, new Utils.Color(58, 54, 56));
-circle.draw();
-console.log(circle.toString());
-
-var rect = new Shapes.Rectangle(new Shapes.Point(6, 7), new Utils.Color(58, 124, 56), 220, 330);
-rect.draw();
-console.log(rect.toString());
-
-var triangle = new Shapes.Triangle(
-    new Shapes.Point(6, 7),
-    new Shapes.Point(9, 100),
-    new Shapes.Point(8, 15),
-    new Utils.Color(158, 54, 156));
-triangle.draw();
-console.log(triangle.toString());
-
-var segment = new Shapes.Segment(
-    new Shapes.Point(9, 10),
-    new Shapes.Point(8, 15),
-    new Utils.Color(58, 54, 56));
-segment.draw();
-console.log(segment.toString());
+//var color = new Utils.Color(54, 16, 28);
+//console.log(color.toHex());
+//
+//var point = new Shapes.Shape(2, 3);
+//point.draw();
+//
+//var shape = new Shapes.Shape(new Shapes.Point(2, 3), "#252627");
+//shape.draw();
+//console.log(shape.toString());
+//
+//var circle = new Shapes.Circle(new Shapes.Point(4, 5), 22, "#585456");
+//circle.draw();
+//console.log(circle.toString());
+//
+//var rect = new Shapes.Rectangle(new Shapes.Point(6, 7), "#151515", 220, 330);
+//rect.draw();
+//console.log(rect.toString());
+//
+//var triangle = new Shapes.Triangle(
+//    new Shapes.Point(6, 7),
+//    new Shapes.Point(9, 100),
+//    new Shapes.Point(8, 15),
+//    "#151515");
+//triangle.draw();
+//console.log(triangle.toString());
+//
+//var segment = new Shapes.Segment(
+//    new Shapes.Point(9, 10),
+//    new Shapes.Point(8, 15),
+//    "#151515");
+//segment.draw();
+//console.log(segment.toString());
 
 
