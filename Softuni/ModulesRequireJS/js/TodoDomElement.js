@@ -1,6 +1,4 @@
 define(function () {
-
-    var TodoList = TodoList || {};
     var TodoDomElement = (function () {
         function TodoDomElement(parent) {
             if (this.constructor === TodoDomElement) {
@@ -18,14 +16,23 @@ define(function () {
         };
 
         TodoDomElement.prototype.setParent = function (parent) {
-            // TODO: validate
+            if (!(parent instanceof HTMLElement)) {
+                parent = document.getElementById(parent);
+            }
+
+            if(!parent){
+                throw  new Error("Parent element is not found. Parent should be HTMLElement or HTMLElement id should be passed as parameter.");
+            }
+
             this._parent = parent;
         };
 
         TodoDomElement.prototype.addToDOM = function (parent) {
-            // TODO: implement adding base element to DOM
+           parent.appendChild(this);
         };
 
         return TodoDomElement;
     }());
+
+    return TodoDomElement;
 });

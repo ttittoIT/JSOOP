@@ -1,30 +1,15 @@
 define(['TodoDomElement'], function (TodoDomElement) {
 
-   // var TodoList = TodoList || {};
+    // var TodoList = TodoList || {};
     var Container = (function () {
-        function Container(parent, header) {
-            TodoDomElement.call(this, parent);
-
-            if (!validateChildrenAreSections(this.childNodes)) {
-                throw new Error("Container children should be of type Section");
-            }
+        function Container(header) {
+            TodoDomElement.call(this, document.getElementsByTagName('body')[0]);
 
             this.setHeader(header);
-            alert("Container loaded");
         }
 
         Container.prototype = Object.create(TodoDomElement.prototype);
         Container.prototype.constructor = this;
-
-        function validateChildrenAreSections(children) {
-            for (var i = 0; i < children.length; i++) {
-                if (!(children[i] instanceof TodoList.Section)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
 
         Container.prototype.getHeader = function getHeader() {
             return this._header;
@@ -34,12 +19,15 @@ define(['TodoDomElement'], function (TodoDomElement) {
             if (!header) {
                 throw  new Error("Container header shouldn't be empty or undefined.");
             }
+            var headerEl = document.createElement('h2');
+            headerEl.innerHTML = header;
 
-            this._header = header;
+            this._header = headerEl;
         };
 
-        Container.prototype.addToDOM = function addToDOM(parents) {
-            // TODO: implement adding a container to DOM
+        Container.prototype.addToDOM = function (parent) {
+            this._parent.appendChild(this._header);
+            TodoDomElement.prototype.addToDOM.call(this, parent);
         };
 
         return Container;

@@ -1,9 +1,14 @@
 (function () {
     'use strict';
-    // './TodoDomElement', './Section',"./Item"
-    require([  './Container' ],
-        function (Container) {
 
-            var container = new Container(null, "Container header");
+    require(['./Container', './TodoDomElement', './Section', "./Item"],
+        function (Container, TodoDomElement, Section, Item) {
+
+            var container = new Container("Container header");
+            container.addToDOM(document.body);
+
+            function attachAddSectionClickEvent() {
+
+            }
         });
 }());

@@ -1,3 +1,11 @@
-/**
- * Created by TECHNOLOG on 14-11-5.
- */
+define(["./TodoDomElement"], function (TodoDomElement) {
+    var Section = (function () {
+        function Section() {
+
+        }
+
+        return Section;
+    }());
+
+    return Section;
+});
