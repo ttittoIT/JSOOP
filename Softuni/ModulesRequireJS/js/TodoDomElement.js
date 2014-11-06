@@ -1,4 +1,4 @@
-define(function () {
+define(['./Container'], function (Container) {
     var TodoDomElement = (function () {
         function TodoDomElement(parent) {
             if (this.constructor === TodoDomElement) {
@@ -20,15 +20,28 @@ define(function () {
                 parent = document.getElementById(parent);
             }
 
-            if(!parent){
+            if (!parent) {
                 throw  new Error("Parent element is not found. Parent should be HTMLElement or HTMLElement id should be passed as parameter.");
             }
 
             this._parent = parent;
         };
 
+        TodoDomElement.prototype.getContext = function () {
+            return this._context;
+        }
+
+        TodoDomElement.prototype.setContext = function (context) {
+            if (!context) {
+                context = document.createElement("div");
+                context.id = this.getHeader().innerHTML;
+            }
+
+            this._context = context;
+        }
+
         TodoDomElement.prototype.addToDOM = function (parent) {
-           parent.appendChild(this);
+            parent.appendChild(this._context);
         };
 
         return TodoDomElement;
