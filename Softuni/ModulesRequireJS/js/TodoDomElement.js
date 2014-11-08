@@ -1,46 +1,26 @@
-define(['./Container'], function (Container) {
+define(function () {
     var TodoDomElement = (function () {
-        function TodoDomElement(parent) {
+        function TodoDomElement(context) {
             if (this.constructor === TodoDomElement) {
                 throw new Error("Can not instantiate abstract class TodoDomElement.");
             }
 
-            this.setParent(parent);
+            this.setContext(context);
         }
-
-        TodoDomElement.prototype = Object.create(HTMLElement.prototype);
-        TodoDomElement.prototype.constructor = this;
-
-        TodoDomElement.prototype.getParent = function () {
-            return this._parent;
-        };
-
-        TodoDomElement.prototype.setParent = function (parent) {
-            if (!(parent instanceof HTMLElement)) {
-                parent = document.getElementById(parent);
-            }
-
-            if (!parent) {
-                throw  new Error("Parent element is not found. Parent should be HTMLElement or HTMLElement id should be passed as parameter.");
-            }
-
-            this._parent = parent;
-        };
 
         TodoDomElement.prototype.getContext = function () {
             return this._context;
-        }
+        };
 
         TodoDomElement.prototype.setContext = function (context) {
-            if (!context) {
-                context = document.createElement("div");
-                context.id = this.getHeader().innerHTML;
-            }
-
             this._context = context;
-        }
+        };
 
         TodoDomElement.prototype.addToDOM = function (parent) {
+            if(!(parent instanceof HTMLElement)){
+                throw  new TypeError('Parent should be of type HTMLElement.');
+            }
+
             parent.appendChild(this._context);
         };
 

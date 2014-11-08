@@ -1,44 +1,44 @@
 define(["./TodoDomElement"], function (TodoDomElement) {
     var Section = (function () {
-        function Section(parent, title) {
-            TodoDomElement.call(this, parent);
-            this.setTitle(title);
+        function Section(header) {
+            this.setContext(header);
         }
 
         Section.prototype = Object.create(TodoDomElement.prototype);
         Section.prototype.constructor = this;
 
-        Section.prototype.getTitle = function () {
-            return this._title;
+
+        Section.prototype.setContext = function (header) {
+            var sectionEl = document.createElement('section'),
+                divItemsEl = document.createElement('div'),
+                sectionTitle = document.createElement('h2'),
+                addItemForm = document.createElement('form'),
+                addItemTitle = document.createElement('input'),
+                addItemBtn = document.createElement('input');
+
+            sectionEl.classList.add('todo-section');
+
+            divItemsEl.classList.add('items');
+            sectionTitle.classList.add('todo-section-title')
+            sectionTitle.textContent = header;
+            divItemsEl.appendChild(sectionTitle);
+
+            addItemForm.classList.add('add-item-frm');
+            addItemTitle.type = 'text';
+            addItemTitle.classList.add('item-content');
+            addItemTitle.placeholder = 'Add item...';
+            addItemForm.appendChild(addItemTitle);
+
+            addItemBtn.type = 'button';
+            addItemBtn.classList.add('add-item-btn');
+            addItemBtn.value = '+';
+            addItemForm.appendChild(addItemBtn);
+
+            sectionEl.appendChild(divItemsEl);
+            sectionEl.appendChild(addItemForm);
+
+            this._context = sectionEl;
         };
-
-        Section.prototype.setTitle = function (title) {
-            this._title = title;
-        };
-
-        Section.prototype.setContext = function (context) {
-
-            context = document.createElement('section');
-            context.className = "list-section";
-
-            var frm = document.createElement("form");
-            frm.id = "add-item-frm";
-
-            var inputBtn = document.createElement("input");
-            inputBtn.type = "button";
-            inputBtn.id  = 'add-item-btn';
-            inputBtn.value = "+";
-            frm.appendChild(inputBtn);
-
-            var inputFld = document.createElement("input");
-            inputFld.type = 'text';
-            inputFld.className = "item-title";
-            inputFld.placeholder = "Add item...";
-            frm.appendChild(inputFld);
-
-            context.appendChild(frm);
-        }
-
 
         return Section;
     }());
